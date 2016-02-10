@@ -1,12 +1,13 @@
-FROM doctorjnupe/pcp-base:latest
+FROM pcp-docker-containers.bintray.io/pcp-base:latest
 MAINTAINER Henry Chang
 
-RUN dnf -y install supervisor pcp pcp-collector pcp-monitor pcp-webapi && dnf clean all
+RUN dnf -y install supervisor pcp pcp-collector pcp-webapi && dnf clean all
 
 RUN . /etc/pcp.conf && echo "-A" >> $PCP_PMCDOPTIONS_PATH
 RUN . /etc/pcp.conf && echo OPTIONS=\"\$OPTIONS -S\" >> $PCP_PMWEBDOPTIONS_PATH
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./supervisord.conf /etc/supervisord.conf
 
 EXPOSE 44321 44323
 
