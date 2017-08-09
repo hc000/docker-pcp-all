@@ -8,8 +8,6 @@ RUN . /etc/pcp.conf && echo OPTIONS=\"\$OPTIONS -S\" >> $PCP_PMWEBDOPTIONS_PATH
 
 RUN sed -i 's/PMCD_CONNECT_TIMEOUT=3/PMCD_CONNECT_TIMEOUT=10/' /etc/pcp/pmwebd/pmwebd.options && sed -i 's/PMCD_REQUEST_TIMEOUT=1/PMCD_REQUEST_TIMEOUT=10/' /etc/pcp/pmwebd/pmwebd.options
 RUN cd /var/lib/pcp/pmdas/libvirt && echo "c" | sh ./Install
-RUN systemctl restart pmwebd
-RUN systemctl stop pmlogger
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./supervisord.conf /etc/supervisord.conf
