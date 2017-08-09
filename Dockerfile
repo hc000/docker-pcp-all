@@ -6,6 +6,11 @@ RUN dnf -y install supervisor pcp pcp-collector pcp-webapi && dnf clean all
 RUN . /etc/pcp.conf && echo "-A" >> $PCP_PMCDOPTIONS_PATH
 RUN . /etc/pcp.conf && echo OPTIONS=\"\$OPTIONS -S\" >> $PCP_PMWEBDOPTIONS_PATH
 
+RUN sed -i 's/PMCD_CONNECT_TIMEOUT=3/PMCD_CONNECT_TIMEOUT=10/' /etc/pcp/pmwebd/pmwebd.options && sed -i 's/PMCD_REQUEST_TIMEOUT=1/PMCD_REQUEST_TIMEOUT=10/' /etc/pcp/pmwebd/pmwebd.options
+RUN cd /var/lib/pcp/pmdas/libvirt && echo "c" | sh ./Install
+RUN service pmwebd restart
+RUN service pmlogger stop
+
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./supervisord.conf /etc/supervisord.conf
 
